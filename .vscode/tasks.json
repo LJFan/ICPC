@@ -1,0 +1,287 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "G++: check the syntax of active file",
+      "detail": "options: \"-std=c++17 -Wall -Wextra -fsyntax-only\"",
+      "command": "g++",
+      "args": [
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-include",
+        "imacros.h",
+        "-I",
+        "/usr/include/boost",
+        "${relativeFileDirname}/${fileBasenameNoExtension}.cpp",
+        "-fsyntax-only"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "echo": true,
+        "reveal": "never",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": true,
+        "clear": true
+      },
+      "group": "build"
+    },
+    {
+      "type": "shell",
+      "label": "G++: preprocess active file",
+      "detail": "options: \"-std=c++17 -Wall -Wextra -E\"",
+      "command": "g++",
+      "args": [
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-include",
+        "imacros.h",
+        "-I",
+        "/usr/include/boost",
+        "-E",
+        "${relativeFileDirname}/${fileBasenameNoExtension}.cpp",
+        "-o",
+        "${relativeFileDirname}/${fileBasenameNoExtension}_pp.cpp"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "group": "build"
+    },
+    {
+      "type": "shell",
+      "label": "G++: build active file",
+      "detail": "options: \"-std=c++17 -Wall -Wextra -O2\"",
+      "command": "g++",
+      "args": [
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-include",
+        "imacros.h",
+        "-O2",
+        "-I",
+        "/usr/include/boost",
+        "${relativeFileDirname}/${fileBasenameNoExtension}.cpp",
+        "-o",
+        "${relativeFileDirname}/${fileBasenameNoExtension}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "shell",
+      "label": "G++: build active file for debugging",
+      "detail": "options: \"-std=c++17 -Wall -Wextra -g -ggdb\"",
+      "command": "g++",
+      "args": [
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-include",
+        "imacros.h",
+        "-I",
+        "/usr/include/boost",
+        "${relativeFileDirname}/${fileBasenameNoExtension}.cpp",
+        "-o",
+        "${relativeFileDirname}/${fileBasenameNoExtension}",
+        "-g",
+        "-ggdb"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "group": "build"
+    },
+    {
+      "type": "shell",
+      "label": "G++: build active file to assembly for debugging",
+      "detail": "options: \"-std=c++17 -Wall -Wextra -O0 -g -fverbose-asm -S\"",
+      "command": "g++",
+      "args": [
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-include",
+        "imacros.h",
+        "-I",
+        "/usr/include/boost",
+        "${relativeFileDirname}/${fileBasenameNoExtension}.cpp",
+        "-o",
+        "${relativeFileDirname}/${fileBasenameNoExtension}.s",
+        "-O0",
+        "-g",
+        "-fverbose-asm",
+        "-S"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "group": "build"
+    },
+    {
+      "type": "shell",
+      "label": "G++: build active file to assembly for submitting",
+      "detail": "options: \"-std=c++14 -Wall -Wextra -Os -S -f...\"",
+      "command": "g++",
+      "args": [
+        "-std=c++14",
+        "-Wall",
+        "-Wextra",
+        "-I",
+        "/usr/include/boost",
+        "${relativeFileDirname}/${fileBasenameNoExtension}.cpp",
+        "-o",
+        "${relativeFileDirname}/${fileBasenameNoExtension}.s",
+        "-Os",
+        "-S",
+        "-fexpensive-optimizations",
+        "-fwhole-program",
+        "-fipa-pta",
+        "-free",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "group": "build"
+    },
+    {
+      "type": "shell",
+      "label": "G++: run active file",
+      "command": "./run.sh",
+      "args": [
+        "${relativeFileDirname}/${fileBasenameNoExtension}",
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "echo": false,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false,
+        "clear": false
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "shell",
+      "label": "G++: build & run active file",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "G++: build active file",
+        "G++: run active file"
+      ],
+      "group": "test"
+    },
+    {
+      "type": "shell",
+      "label": "G++: build active file for debugging to assembly",
+      "detail": "options: \"-std=c++17 -Wall -Wextra -O0 -g -fverbose-asm -S\"",
+      "command": "g++",
+      "args": [
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-include",
+        "imacros.h",
+        "-I",
+        "/usr/include/boost",
+        "${relativeFileDirname}/${fileBasenameNoExtension}.cpp",
+        "-o",
+        "${relativeFileDirname}/${fileBasenameNoExtension}.s",
+        "-O0",
+        "-g",
+        "-fverbose-asm",
+        "-S"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "echo": false,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": true
+      },
+      "group": "build"
+    }
+  ],
+}

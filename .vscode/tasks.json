@@ -4,10 +4,10 @@
     {
       "type": "shell",
       "label": "G++: check the syntax of active file",
-      "detail": "options: \"-std=c++17 -Wall -Wextra -fsyntax-only\"",
+      "detail": "options: \"-std=c++20 -Wall -Wextra -fsyntax-only\"",
       "command": "g++",
       "args": [
-        "-std=c++17",
+        "-std=c++20",
         "-Wall",
         "-Wextra",
         "-include",
@@ -36,10 +36,10 @@
     {
       "type": "shell",
       "label": "G++: preprocess active file",
-      "detail": "options: \"-std=c++17 -Wall -Wextra -E\"",
+      "detail": "options: \"-std=c++20 -Wall -Wextra -E\"",
       "command": "g++",
       "args": [
-        "-std=c++17",
+        "-std=c++20",
         "-Wall",
         "-Wextra",
         "-include",
@@ -70,10 +70,10 @@
     {
       "type": "shell",
       "label": "G++: build active file",
-      "detail": "options: \"-std=c++17 -Wall -Wextra -O2\"",
+      "detail": "options: \"-std=c++20 -Wall -Wextra -O2\"",
       "command": "g++",
       "args": [
-        "-std=c++17",
+        "-std=c++20",
         "-Wall",
         "-Wextra",
         "-include",
@@ -107,10 +107,10 @@
     {
       "type": "shell",
       "label": "G++: build active file for debugging",
-      "detail": "options: \"-std=c++17 -Wall -Wextra -g -ggdb\"",
+      "detail": "options: \"-std=c++20 -Wall -Wextra -g -ggdb\"",
       "command": "g++",
       "args": [
-        "-std=c++17",
+        "-std=c++20",
         "-Wall",
         "-Wextra",
         "-include",
@@ -142,10 +142,10 @@
     {
       "type": "shell",
       "label": "G++: build active file to assembly for debugging",
-      "detail": "options: \"-std=c++17 -Wall -Wextra -O0 -g -fverbose-asm -S\"",
+      "detail": "options: \"-std=c++20 -Wall -Wextra -O0 -g -fverbose-asm -S\"",
       "command": "g++",
       "args": [
-        "-std=c++17",
+        "-std=c++20",
         "-Wall",
         "-Wextra",
         "-include",
@@ -249,10 +249,10 @@
     {
       "type": "shell",
       "label": "G++: build active file for debugging to assembly",
-      "detail": "options: \"-std=c++17 -Wall -Wextra -O0 -g -fverbose-asm -S\"",
+      "detail": "options: \"-std=c++20 -Wall -Wextra -O0 -g -fverbose-asm -S\"",
       "command": "g++",
       "args": [
-        "-std=c++17",
+        "-std=c++20",
         "-Wall",
         "-Wextra",
         "-include",

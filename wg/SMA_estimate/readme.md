@@ -3,4 +3,13 @@
 ## 符号约定
 | 符号 | 含义 | 注释 |
 | ---- | ---- | ---- |
-| $t$  | $t$       |
+|![][t]|时间|
+|![][P(t)]|时间|
+
+
+
+
+[t]: https://latex.codecogs.com/svg.latex?t
+[P(t)]: https://latex.codecogs.com/svg.latex?P(t)
+[t]: https://latex.codecogs.com/svg.latex?t
+[t]: https://latex.codecogs.com/svg.latex?t

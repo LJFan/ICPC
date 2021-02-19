@@ -17,9 +17,9 @@ using namespace std;
 // 7. All integers on the same line are separated by spaces.
 //
 // Output format convetions:
-// 8. For each but first lines of input, out 1 floating number: the SMA;
-// 9. First out is nan, indicating SMA is undefined at present.
-//
+// 8. For each but first lines of input, output 1 line, which containts 2
+//    floatings: the estimated SMA and the estimated error in parentheses;
+// 9. First output is nan, indicating the SMA is undefined at present.
 
 using my_int_t = int64_t;   // conventions #5
 using my_float_t = double;  // conventions #6
@@ -51,13 +51,18 @@ struct dur_price {
   }
 };
 
+template <bool SpaceConstraint>
+class SMA;
+
+// SMA with space constraint
 // SMA performance:
 // Total time: O(n * log(Bin))
 // Total space: O(Bin)
-class SMA {
+template <>
+class SMA<true> {
  private:
-  const my_float_t Win;
   const my_int_t Bin;
+  const my_float_t Win;
   template <typename T>
   struct MyComp {
     const T& hist;
@@ -74,8 +79,8 @@ class SMA {
   set<my_float_t, MyComp<decltype(hist)>> que;
 
  public:
-  SMA(const my_float_t Win_, const my_int_t Bin_)
-      : Win(Win_), Bin(Bin_), tot{0, 0}, que{hist} {
+  SMA(const my_int_t Bin_, const my_float_t Win_)
+      : Bin(Bin_), Win(Win_), tot{0, 0}, que{hist} {
     assert(Win > 1 && Bin > 1);  // convention #2
   }
 
@@ -123,7 +128,7 @@ class SMA {
   }
 
  public:
-  SMA& push(const my_float_t time, const my_float_t price) {
+  SMA& update(const my_float_t time, const my_float_t price) {
     if (!hist.empty()) {
       auto replace = *--hist.end();
       hist.erase(--hist.end());
@@ -146,7 +151,8 @@ class SMA {
 // SMA_std performance:
 // Total time: O(n)
 // Total space: O(n)
-class SMA_std {
+template <>
+class SMA<false> {
   const my_float_t Win;
   deque<dur_price> que;
   dur_price tot;
@@ -166,8 +172,8 @@ class SMA_std {
   }
 
  public:
-  SMA_std(my_float_t Win_) : Win(Win_), tot{0, 0} {}
-  SMA_std& push(const my_float_t time, const my_float_t price) {
+  SMA(my_float_t Win_) : Win(Win_), tot{0, 0} {}
+  SMA& update(const my_float_t time, const my_float_t price) {
     if (!que.empty()) {
       que.back().duration += time;
       tot += que.back();
@@ -182,18 +188,20 @@ class SMA_std {
   }
 };
 
+using MovingAverage = SMA<true>;
+using MovingAverage_std = SMA<false>;
+
 int main() {
   my_float_t Win;     // conventions #2
   my_int_t Bin;       // conventions #2
   cin >> Win >> Bin;  // conventions #7
   my_float_t t, p;    // conventions #6
-  SMA sma(Win, Bin);
-  SMA_std sma_std(Win);
+  MovingAverage ma(Bin, Win);
+  MovingAverage_std ma_std(Win);
   while (cin >> t >> p) {  // conventions #1 #3 #7
-    cout << ">> " << t << ' ' << p << endl;
-    auto out = sma.push(t, p).get();
-    auto err = sma_std.push(t, p).get() - out;
+    auto out = ma.update(t, p).get();
+    auto err = ma_std.update(t, p).get() - out;
     cout << out;  // conventions #6
-    cout << (err > 0 ? "  (+" : "  (") << err << ")" << endl;
+    cout << (err > 0 ? " (+" : " (") << err << ")" << endl;
   }
 }

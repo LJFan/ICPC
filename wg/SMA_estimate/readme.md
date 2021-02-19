@@ -2,6 +2,7 @@
 
 ## 任务
 ![task](./task.jpg)
+![task](./task(cont).png)
 
 ## 基本符号约定
 | 符号 | 含义 | 注释 |

@@ -1,5 +1,8 @@
 # 价格移动平均的估计（空间受限）
 
+## 任务
+![task](./task.jpg)
+
 ## 基本符号约定
 | 符号 | 含义 | 注释 |
 | ---- | ---- | ---- |
@@ -64,7 +67,26 @@
 ### 方案2
 利用![\widetilde{P}(t)]重新生成![B]个伪历史信息代替原历史信息，使得误差上界尽量小。
 
-未完待续
+新生成的伪历史时刻记为![def{H_t^\ast}]，伪历史价格记为![def{H_P^\ast}]
+
+伪历史信息的来源是![B+1]个原历史信息插值得到。
+
+但是生成的伪历史信息会引入额外误差，因为存在插值误差![E_P(t)]。
+
+为了表示总误差![\check{E_A}(t_0;H_t^\ast)]（额外误差+原有误差），引入历史信息的误差势![M_i^\ast]
+
+其中![M_j]为原历史信息的误差势。
+
+易知，若某条伪历史时刻与真历史时刻重合，则![M_i^\ast=0]
+
+总误差可以表示为
+
+![def{\check{E_A}(t_0;H_t^\ast)}]
+![def2{\check{E_A}(t_0;H_t^\ast)}]
+
+因此最小化![\check{E_A}(t_0;H_t^\ast)]，即
+
+![def2{H_t^\ast}]
 
 空间复杂度![O(B)]，时间复杂度![O(\ast)]
 
@@ -109,4 +131,13 @@
 [O(B)]: https://latex.codecogs.com/svg.latex?O(B)
 [O(\log{B})]: https://latex.codecogs.com/svg.latex?O(%5Clog%7BB%7D)
 [O(\ast)]: https://latex.codecogs.com/svg.latex?O(%5Cast)
-[]: https://latex.codecogs.com/svg.latex?
+[def{H_t^\ast}]: https://latex.codecogs.com/svg.latex?H_t%5E%5Cast%3D%7Bt_0%5E%5Cast%2Ct_%7B-1%7D%5E%5Cast%2C%5Cldots%7D
+[def{H_P^\ast}]: https://latex.codecogs.com/svg.latex?H_P%5E%5Cast%3D%5Cleft%5C%7B%5Cwidetilde%7BP%7D%5Cleft(t_0%5E%5Cast%5Cright)%2C%5Cwidetilde%7BP%7D%5Cleft(t_%7B-1%7D%5E%5Cast%5Cright)%2C%5Cldots%5Cright%5C%7D%0A
+[\check{E_A}(t_0;H_t^\ast)]: https://latex.codecogs.com/svg.latex?%5Ccheck%7BE_A%7D(t_0%3BH_t%5E%5Cast)
+[M_i^\ast]: https://latex.codecogs.com/svg.latex?M_i%5E%5Cast
+[def{M_i^\ast}]: https://latex.codecogs.com/svg.latex?M_i^\ast=\min_j{\left(M_j+L\left|t_i^\ast-t_j\right|\right)}
+[M_j]: https://latex.codecogs.com/svg.latex?M_j
+[M_i^\ast=0]: https://latex.codecogs.com/svg.latex?M_i%5E%5Cast%3D0
+[def{\check{E_A}(t_0;H_t^\ast)}]: https://latex.codecogs.com/svg.latex?%5Ccheck%7BE_A%7D%5Cleft(t_0%3BH_t%5E%5Cast%5Cright)%3D%5Cfrac%7B1%7D%7BW%7D%5Cint_%7Bt_0-W%7D%5E%7Bt_0%7D%7B%5Cmin_i%7B%5Cleft(M_i%5E%5Cast%2BL%5Cleft%7Ct-t_i%5E%5Cast%5Cright%7C%5Cright)%7Ddt%7D
+[def2{\check{E_A}(t_0;H_t^\ast)}]: https://latex.codecogs.com/svg.latex?%3D%5Cfrac%7B1%7D%7BW%7D%5Cint_%7Bt_0-W%7D%5E%7Bt_0%7D%7B%5Cmin_%7Bi%2Cj%7D%7B%5Cleft(M_j%2BL%5Cleft%7Ct_i%5E%5Cast-t_j%5Cright%7C%2BL%5Cleft%7Ct-t_i%5E%5Cast%5Cright%7C%5Cright)%7Ddt%7D
+[def2{H_t^\ast}]: https://latex.codecogs.com/svg.latex?H_t%5E%5Cast%3D%5Carg%7B%5Cmin_%7BH_t%5E%5Cast%7D%7B%5Ccheck%7BE_A%7D%5Cleft(t_0%3BH_t%5E%5Cast%5Cright)%7D%7D

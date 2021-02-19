@@ -27,7 +27,8 @@
 
 其中![s]满足![def{s}]
 
-设![def{\widetilde{P}(t)}]误差为![E_A(t_0)]，即：
+设![\widetilde{A}(t)]误差为![E_A(t_0)]，即：
+
 ![def{E_A(t_0)}]
 
 设![\widetilde{P}(t)]的误差为![E_P(t)]，即：
@@ -131,7 +132,7 @@
 [O(B)]: https://latex.codecogs.com/svg.latex?O(B)
 [O(\log{B})]: https://latex.codecogs.com/svg.latex?O(%5Clog%7BB%7D)
 [O(\ast)]: https://latex.codecogs.com/svg.latex?O(%5Cast)
-[def{H_t^\ast}]: https://latex.codecogs.com/svg.latex?H_t%5E%5Cast%3D%7Bt_0%5E%5Cast%2Ct_%7B-1%7D%5E%5Cast%2C%5Cldots%7D
+[def{H_t^\ast}]: https://latex.codecogs.com/svg.latex?H_t%5E%5Cast%3D%5C%7Bt_0%5E%5Cast%2Ct_%7B-1%7D%5E%5Cast%2C%5Cldots%5C%7D
 [def{H_P^\ast}]: https://latex.codecogs.com/svg.latex?H_P%5E%5Cast%3D%5Cleft%5C%7B%5Cwidetilde%7BP%7D%5Cleft(t_0%5E%5Cast%5Cright)%2C%5Cwidetilde%7BP%7D%5Cleft(t_%7B-1%7D%5E%5Cast%5Cright)%2C%5Cldots%5Cright%5C%7D%0A
 [\check{E_A}(t_0;H_t^\ast)]: https://latex.codecogs.com/svg.latex?%5Ccheck%7BE_A%7D(t_0%3BH_t%5E%5Cast)
 [M_i^\ast]: https://latex.codecogs.com/svg.latex?M_i%5E%5Cast

@@ -13,7 +13,7 @@
         "<",
         "${fileDirname}/${fileBasenameNoExtension}.in"
       ],
-      "stopAtEntry": true,
+      "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
       "externalConsole": false,

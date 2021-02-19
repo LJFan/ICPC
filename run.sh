@@ -30,12 +30,14 @@ else
 fi
 
 
-# print output to screen
-if [[ $(tail -c 1 "$cache_out" | wc -l) -eq 0 ]]; then
-  printf "$warning_head A newline character is appended to the output\n"
+if [ ! -s "$cache_out" ]; then
+  printf "$warning_head The output is empty\n"
+elif [ $(tail -c 1 "$cache_out" | wc -l) -eq 0 ]; then
+  printf "$warning_head A newline character has been appended to the output\n"
   printf "\n" >> "$cache_out"
 fi
 
+# print output to screen
 total_lines="$(wc -l "$cache_out" | grep -o -E '[0-9]+' | head -1)"
 if [ $total_lines -gt $(expr $head_lines + $tail_lines + 1) ]; then
   head "-$head_lines" "$cache_out"

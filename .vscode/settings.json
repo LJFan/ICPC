@@ -1,5 +1,6 @@
 {
   "files.associations": {
+    "*.in": "shellscript",
     "algorithm": "cpp",
     "xutility": "cpp",
     "utility": "cpp",
@@ -82,7 +83,8 @@
     "cfenv": "cpp",
     "cinttypes": "cpp",
     "typeindex": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "thread": "cpp"
   },
   "C_Cpp.default.compilerPath": "g++",
   "C_Cpp.default.cppStandard": "c++20",

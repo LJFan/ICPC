@@ -49,6 +49,8 @@ map<size_t, array<vector<size_t>, 2>> ref;
 // refcnt[id] = reference count
 map<size_t, ptrdiff_t> refcnt;
 
+size_t id2pos(size_t id) { return id == document_id ? 0 : id; }
+
 // ret[_] = {hash, pos/id, len}
 vector<tuple<MyHash, size_t, size_t>> get_matches(const size_t id,
                                                   const size_t len) {
@@ -66,7 +68,7 @@ vector<tuple<MyHash, size_t, size_t>> get_matches(const size_t id,
   return matches;
 }
 
-// time: O(file_size * lookup_len * log(file_size))
+// time: O(file_size * lookup_len)
 // space: O(file_size * lookup_len)
 void get_tab() {
   size_t file_size = fread(buf, 1, buf_size, stdin);
@@ -74,6 +76,7 @@ void get_tab() {
     fprintf(stderr, "Error: buf is not large enough.\n");
     exit(1);
   }
+  // get dict
   for (size_t id = 0; id < file_size; id++) {
     auto h = MyHash{}.append(buf[id]);
     if (dict.count(h) == 0) {
@@ -110,6 +113,8 @@ void get_tab() {
     }
     id += match_len;
   }
+  fprintf(stderr, "dict.size() = %zu\n", dict.size());
+  // shrink dict
   dict.clear();
   for (const auto &[id, second] : tab) {
     const size_t &len = second.first;
@@ -117,6 +122,14 @@ void get_tab() {
     for (size_t j = 0; j < len; j++) h.append(buf[id + j]);
     if (dict.count(h) == 0) dict[h] = {id, len};
   }
+
+  // insert the document_id to simplify the code
+  id_list.reserve(tab.size() + 1);
+  for (const auto &p : tab) id_list.push_back(p.first);
+  tab[document_id] = {file_size, id_list};
+  id_list.push_back(document_id);
+
+  // use shrunk dict to reprduce tab
   for (auto &[id, second] : tab) {
     auto &[len, subs] = second;
     if (len <= 1) continue;
@@ -124,7 +137,8 @@ void get_tab() {
     vector<dp_tuple> dp(len + 1, {buf_size, 0, 0});
     dp[0] = {0, 0, 0};
     for (size_t j = 0; j < len; j++) {
-      auto matches = get_matches(id + j, len - max<size_t>(1, j));
+      auto matches = get_matches(id2pos(id) + j,
+                                 min<size_t>({len - 1, len - j, lookup_len}));
       for (const auto &[match_hash, match_id, match_len] : matches) {
         static_cast<void>(match_hash);
         assert(j + match_len <= len);
@@ -133,16 +147,10 @@ void get_tab() {
       }
     }
     assert(get<0>(dp.back()) < buf_size);
-    // TODO: try to figure out why the condition below is needed
-    if (subs.size() <= get<0>(dp.back())) continue;
     subs.clear();
     for (size_t j = len; j; j = get<1>(dp[j])) subs.push_back(get<2>(dp[j]));
     reverse(subs.begin(), subs.end());
   }
-  id_list.reserve(tab.size() + 1);
-  for (const auto &p : tab) id_list.push_back(p.first);
-  tab[document_id] = {file_size, id_list};
-  id_list.push_back(document_id);
 }
 
 void get_sym() {
@@ -184,6 +192,7 @@ void get_sym() {
                 (p1.second == p2.second && p1.first < p2.first);
        });
   assert(refcnt_sorted.size() <= sym_pool.size());
+  sym.clear();
   for (size_t i = 0; i < refcnt_sorted.size(); i++) {
     sym[refcnt_sorted[i].first] = sym_pool[i];
   }
@@ -289,7 +298,7 @@ auto get_def(const size_t id) -> decltype((def[id])) {
   if (def.count(id)) return def[id];
   auto &ret = def[id];
   const auto &[len, subs] = tab[id];
-  string raw = get_raw(buf + (id == document_id ? 0 : id), len);
+  string raw = get_raw(buf + id2pos(id), len);
   if (subs.empty()) return ret = {move(raw), null_ew_symbol};
   auto two_choices = get_two_choices(subs);
   for (const Choice &ew : {ew_quote, ew_symbol}) {
@@ -330,9 +339,7 @@ auto get_def(const size_t id) -> decltype((def[id])) {
   return ret;
 }
 
-// @return  the length of document.
-size_t get_refcnt() {
-  size_t ret = 0;
+void get_refcnt() {
   for (auto &[id, cnt] : refcnt) static_cast<void>(id), cnt = 0;
   for (const size_t &id : id_list) {
     const Choice ew =
@@ -342,8 +349,13 @@ size_t get_refcnt() {
             : ew_symbol;
     for (const size_t &sub_id : ::ref[id][ew]) refcnt[sub_id]++;
   }
+}
+
+// @return  the length of document.
+size_t get_doc_len() {
+  size_t ret = 0;
   refcnt[document_id] = 1;
-  for (const auto &id : id_list) {
+  for (const size_t &id : id_list) {
     if (refcnt[id] == 0) continue;
     const auto &[str_ew_quote, str_ew_symbol] = def[id];
     const string &str_define =
@@ -400,22 +412,14 @@ int main() {
     refcnt[p.first]++;
     for (const auto &sub_id : p.second.second) refcnt[sub_id]++;
   }
-  for (size_t i = 0, last_doc_len = 0; i < 10; i++) {
-    sym.clear();
+  for (size_t i = 0, last_doc_len = 0; i < 20; i++) {
     get_sym();
     def.clear();
     ::ref.clear();
-    for (const auto &id : id_list) get_def(id);
-    size_t doc_len = get_refcnt();
-    {
-      vector<size_t> sizes = {id_list.size(), tab.size(), sym.size(),
-                              def.size(), refcnt.size()};
-      if (!equal(sizes.begin() + 1, sizes.end(), sizes.begin())) {
-        for (auto &s : sizes)
-          fprintf(stderr, "sizes[%zu] = %zu\n", &s - sizes.data(), s);
-      }
-      fprintf(stderr, "iter #%zu: doc_len = %zu\n", i, doc_len);
-    }
+    get_def(document_id);
+    get_refcnt();
+    size_t doc_len = get_doc_len();
+    fprintf(stderr, "iter #%zu: doc_len = %zu\n", i, doc_len);
     if (doc_len == last_doc_len) break;
     last_doc_len = doc_len;
   }

@@ -8,5 +8,5 @@ typedef boost::multiprecision::number<boost::multiprecision::cpp_int_backend<
 T a, b;
 int main() {
   cin >> a >> b;
-  cout << a + b << endl;
+  cout << a * b << endl;
 }
